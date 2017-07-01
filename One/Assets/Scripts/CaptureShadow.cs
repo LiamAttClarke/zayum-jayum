@@ -32,7 +32,7 @@ public class CaptureShadow : MonoBehaviour
 		MoveToRandomPosition();
 	}
 
-	void CaptureRandomTexture()
+	public void CaptureRandomTexture()
 	{
 
 		MoveToRandomPosition();
@@ -41,7 +41,7 @@ public class CaptureShadow : MonoBehaviour
 		StencilCamera.RenderWithShader(StencilShader, null);
 	}
 
-	void CaptureTrackedTexture()
+	public void CaptureTrackedTexture()
 	{
 		MatchCameraToObj(MatchObj);
 		StencilCamera.targetTexture = TrackedTexture;
