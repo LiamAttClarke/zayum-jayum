@@ -32,7 +32,7 @@ public class CaptureShadow : MonoBehaviour
 		MoveToRandomPosition();
 	}
 
-	void CaptureRandomTexture()
+	public void CaptureRandomTexture()
 	{
 
 		MoveToRandomPosition();
@@ -41,7 +41,7 @@ public class CaptureShadow : MonoBehaviour
 		StencilCamera.RenderWithShader(StencilShader, null);
 	}
 
-	void CaptureTrackedTexture()
+	public void CaptureTrackedTexture()
 	{
 		MatchCameraToObj(MatchObj);
 		StencilCamera.targetTexture = TrackedTexture;
@@ -51,13 +51,6 @@ public class CaptureShadow : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-		{
-			CaptureRandomTexture();
-		}
-		if (Input.touchCount > 1 && Input.GetTouch(1).phase == TouchPhase.Began)
-		{
-			CaptureTrackedTexture();
-		}
+		
 	}
 }

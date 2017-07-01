@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShapeCheck : MonoBehaviour {
-
-	public RenderTexture shapeTexture;
-	private Texture2D initialTexture, secondTexture;
+	public CaptureShadow captureShadow;
+	Texture2D _randomTexture, _trackedTexture;
 	// Use this for initialization
 	void Start () {
 		
 
 	}
 
-	Texture2D copyTex(Texture2D target = null)
+	Texture2D copyTex(RenderTexture source, Texture2D target = null)
 	{
-		RenderTexture.active = shapeTexture;
-		target.ReadPixels(new Rect(0, 0, shapeTexture.width, shapeTexture.height), 0, 0);
+		RenderTexture.active = source;
+		target.ReadPixels(new Rect(0, 0, source.width, source.height), 0, 0);
 		target.Apply();
 		return target;
 	}
@@ -30,8 +29,8 @@ public class ShapeCheck : MonoBehaviour {
 			{
 				Color shapeCol = shape.GetPixel(x, y);
 				Color stencilCol = stencil.GetPixel(x, y);
-				bool shapeOn = shapeCol.r > thresh && shapeCol.g > thresh && shapeCol.b > thresh;
-				bool stencilOn = stencilCol.r > thresh && stencilCol.g > thresh && stencilCol.b > thresh;
+				bool shapeOn = shapeCol.r < thresh && shapeCol.g < thresh && shapeCol.b < thresh;
+				bool stencilOn = stencilCol.r < thresh && stencilCol.g < thresh && stencilCol.b < thresh;
 				if (shapeOn)
 				{
 					if (stencilOn)
@@ -58,21 +57,22 @@ public class ShapeCheck : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
 		{
-			print("SPACE");
-			initialTexture = new Texture2D(shapeTexture.width, shapeTexture.height);
-			secondTexture = new Texture2D(shapeTexture.width, shapeTexture.height);
-			copyTex(initialTexture);
+			captureShadow.CaptureRandomTexture();
+			_randomTexture = new Texture2D(captureShadow.RandomTexture.width, captureShadow.RandomTexture.height);
+			_trackedTexture = new Texture2D(captureShadow.TrackedTexture.width, captureShadow.TrackedTexture.height);
+			copyTex(captureShadow.RandomTexture, _randomTexture);
 		}
-		if (Input.GetMouseButtonDown(0))
+		if (Input.touchCount > 1 && Input.GetTouch(1).phase == TouchPhase.Began)
 		{
-			print("Mousedown");
-			if (initialTexture != null)
+			captureShadow.CaptureTrackedTexture();
+			if (_randomTexture != null)
 			{
-				copyTex(secondTexture);
-				CalculateIntersection(secondTexture, initialTexture);
+				copyTex(captureShadow.TrackedTexture, _trackedTexture);
+				CalculateIntersection(_trackedTexture, _randomTexture);
 			}
 		}
+		
 	}
 }
