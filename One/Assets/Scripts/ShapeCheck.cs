@@ -50,8 +50,10 @@ public class ShapeCheck : MonoBehaviour {
 		}
 		float shapeIntersecting = ((float)intersected / (intersected + shapeMiss)) * 100f;
 		float stencilIntersecting = ((float)intersected / (intersected + stencilMiss)) * 100f;
+		float score = 100f - (100f - shapeIntersecting) / 2f - (100f - stencilIntersecting) / 2f;
 		print("Intersected: " + intersected + " ShapeMiss: " + shapeMiss + " StencilMiss: " + stencilMiss);
 		print("ShapeIntersecting: " + shapeIntersecting + "%  StencilIntersecting: " + stencilIntersecting + "%");
+		print("SCORE: " + score + "%");
 	}
 	
 
